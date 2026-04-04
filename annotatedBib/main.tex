@@ -1,0 +1,140 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+
+\title{Annotated Bibliography:\\Safe AI via Evolutionary Algorithms}
+\author{Sachin Mohan}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Annotated Bibliography}
+
+This bibliography surveys research at the intersection of evolutionary optimisation and safe AI. The entries span two complementary paths: (1)~safe reinforcement learning, formalising and enforcing safety constraints during policy training, and (2)~evolutionary strategies (ES) as alternatives or complements to gradient-based RL. Connecting these threads, recent work demonstrates that ES can fine-tune large language models for alignment tasks while naturally avoiding reward hacking, and that QD algorithms such as MAP-Elites can illuminate safety--performance trade-offs. Together, the surveyed papers potentially motivate the use of evolutionary algorithms as a, scalable approach to training safe AI systems.
+
+\begin{thebibliography}{7}
+\bibitem{ji2023safety}
+Jiaming Ji, Borong Zhang, Jiayi Zhou, Xuehai Pan, Weidong Huang, Ruiyang Sun, Yiran Geng, Yifan Zhong, Juntao Dai, and Yaodong Yang.
+\textit{Safety-Gymnasium: A Unified Safe Reinforcement Learning Benchmark}.
+In 37th Conference on Neural Information Processing Systems (NeurIPS 2023), Track on Datasets and Benchmarks, 2023.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To address the lack of a standardised evaluation framework for safe RL in continuous control domains by providing a unified benchmark suite and algorithm library built on the CMDP formalism.
+
+\textbf{Style/Type:} conference paper (NeurIPS Datasets and Benchmarks track).
+
+\textbf{Cross references:} Nangue Tasse et al.~\cite{nanguetasse2024rosarl} evaluate on the closely related Safety Gym environments and compare against several CMDP baselines benchmarked here. However, unlike Safety-Gymnasium's explicit cost-constraint formulation, ROSARL encodes safety entirely through reward shaping, arguing that specifying cost functions and thresholds is itself a limitation. Similarly, the 16 algorithms in SafePO are all gradient-based constrained optimisation methods; derivative-free approaches such as the ES of Salimans et al.~\cite{salimans2017evolution} and the QD methods of Tjanaka et al.~\cite{tjanaka2022approximating} are absent, leaving open the question of whether evolutionary methods can compete on these benchmarks. The environments could also serve as a testbed for MAP-Elites~\cite{mouret2015illuminating}, where safety-relevant metrics could define feature-space dimensions.
+
+\textbf{Summary:} The authors present Safety-Gymnasium, a broad benchmarking platform that packages over 54 task configurations for assessing SafeRL methods, spanning single-agent, multi-agent, and vision-only settings. Tasks involve multiple robot types (Point, Car, Doggo, Racecar, Ant) navigating environments with velocity, position, and contact constraints. The authors also release SafePO, a single-file algorithm library containing 16 state-of-the-art SafeRL algorithms spanning Lagrangian-based, projection-based, first-order, and second-order methods. Safety-Gymnasium improves upon the earlier Safety Gym by refactoring the physics engine to support MuJoCo directly (replacing the discontinued mujoco-py), extending agent and task components to cover multi-agent domains, enhancing visual task support, and simplifying installation. The paper formalises safe RL through CMDPs and Constrained Markov Games, providing a rigorous mathematical framework for the benchmark. A key finding is that no single algorithm dominates: Lagrangian methods are strong but hyperparameter-sensitive, while second-order methods excel on navigation but underperform on velocity tasks. The work is limited to simulated continuous-control domains, leaving sim-to-real transferability unaddressed, and does not capture every category of safety concern---especially those involving human factors in collaborative human--AI settings.
+\end{quotation}
+
+\bibitem{tjanaka2022approximating}
+Bryon Tjanaka, Matthew C. Fontaine, Julian Togelius, and Stefanos Nikolaidis.
+\textit{Approximating Gradients for Differentiable Quality Diversity in Reinforcement Learning}.
+In Proceedings of the Genetic and Evolutionary Computation Conference (GECCO '22), Boston, MA, USA. ACM, 2022.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To bring differentiable quality diversity optimisation into RL settings---where true objective and measure gradients are not accessible---by fusing actor-critic gradient estimates with evolution strategies inside the CMA-MEGA framework.
+
+\textbf{Style/Type:} conference paper (GECCO), theoretical and empirical.
+
+\textbf{Cross references:} Both variants build directly on the MAP-Elites archive of Mouret and Clune~\cite{mouret2015illuminating}, adding gradient-informed search to what was originally a purely random-mutation algorithm. The OpenAI-ES gradient estimator of Salimans et al.~\cite{salimans2017evolution} is adopted as a subroutine for approximating measure gradients; however, unlike Salimans et al.'s single-objective setting, the estimator is embedded within a quality-diversity loop that maintains an archive of diverse policies. The CMA-ES optimizer reappears in ESSA~\cite{korotyshova2025essa} for LLM alignment, though there it operates in a compressed SVD space rather than a gradient-coefficient space. In contrast to Safety-Gymnasium~\cite{ji2023safety}, which benchmarks constrained RL, this work has no notion of safety constraints---the QD framework optimises for performance diversity, not constraint satisfaction, though safety metrics could in principle define additional archive dimensions.
+
+\textbf{Summary:} This work generalises differentiable quality diversity (DQD) to RL settings in which true gradients cannot be computed. The authors propose two RL variants of CMA-MEGA: CMA-MEGA~(ES), which approximates both objective and measure gradients via evolution strategies, and CMA-MEGA~(TD3, ES), which uses the actor-critic method TD3 for objective gradients while retaining ES for measure gradients. Both variants build on the MAP-Elites archive structure and employ the CMA-ES optimizer. Benchmarked on four PyBullet locomotion tasks, CMA-MEGA~(TD3, ES) achieves quality diversity scores comparable to the state-of-the-art PGA-MAP-Elites algorithm. A notable finding is that the ES-only variant underperforms in reward-shaped environments because it treats the objective as a pure black box, missing MDP structure that TD3 exploits---agents get stuck in local optima such as standing still to maximise ``stay upright'' signals. The work is limited to small policy networks (two hidden layers of 128 nodes) on simulated locomotion, with only five trials per condition, and does not integrate safety constraints or entropy-based exploration.
+\end{quotation}
+
+\bibitem{mouret2015illuminating}
+Jean-Baptiste Mouret and Jeff Clune.
+\textit{Illuminating search spaces by mapping elites}.
+arXiv preprint arXiv:1504.04909, 2015.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To address the problem of understanding how performance varies across dimensions of interest in high-dimensional search spaces, in domains ranging from neural-network design to soft robotics, by introducing MAP-Elites---a quality-diversity evolutionary algorithm that returns a structured archive of high-performing solutions rather than a single optimum.
+
+\textbf{Style/Type:} preprint, theoretical and empirical.
+
+\textbf{Cross references:} MAP-Elites is the direct ancestor of CMA-MEGA~\cite{tjanaka2022approximating}, which addresses one of its key limitations---reliance on random mutation---by incorporating gradient information via CMA-ES. Similarly to Salimans et al.~\cite{salimans2017evolution}, MAP-Elites is gradient-free and embarrassingly parallel, but unlike OpenAI-ES it preserves a repertoire of \emph{behaviourally distinct} policies instead of collapsing to one optimum. In contrast to both Safety-Gymnasium~\cite{ji2023safety} and ROSARL~\cite{nanguetasse2024rosarl}, MAP-Elites has no notion of safety constraints; however, its feature-space dimensions could in principle encode safety metrics (e.g., constraint violation rates), illuminating the safety--performance trade-off. ESSA~\cite{korotyshova2025essa} can be viewed as a ``single-cell MAP-Elites''---it uses CMA-ES but discards the diversity-preservation mechanism entirely to converge on one aligned model.
+
+\textbf{Summary:} This foundational paper presents MAP-Elites (Multi-dimensional Archive of Phenotypic Elites), a quality-diversity algorithm that populates a structured grid with top-performing solutions spanning a user-specified behavioural space. Rather than seeking a single optimum, MAP-Elites illuminates the relationship between performance and dimensions of variation by discretising user-chosen feature dimensions into a grid, then iteratively selecting elites from the archive, mutating them, and placing offspring into appropriate cells if they outperform the current occupant. The authors demonstrate MAP-Elites across three experimental domains: (1)~evolving neural network weights to produce target images, (2)~simulated soft robot morphologies, and (3)~a real soft robotic arm. A key finding is the ``stepping-stone'' effect: high-performing elites typically descend via long lineage paths that pass through distant cells in the archive, suggesting that diversity maintenance is essential for discovering top solutions. The algorithm is limited by the curse of dimensionality in its feature grid (cell count grows exponentially with feature dimensions), the need to hand-design meaningful behavioural descriptors a priori, and the absence of gradient information, which makes it slower than gradient-based methods in domains where gradients are available.
+\end{quotation}
+
+\bibitem{nanguetasse2024rosarl}
+Geraud Nangue Tasse, Tamlin Love, Mark Nemecek, Steven James, and Benjamin Rosman.
+\textit{ROSARL: Reward-Only Safe Reinforcement Learning}.
+In Reinforcement Learning Conference, August 2024.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To address the difficulty of specifying cost functions and constraint thresholds for safe RL in stochastic continuous-control environments by deriving a theoretically grounded reward-only penalty that guarantees safe optimal policies without any separate safety objective.
+
+\textbf{Style/Type:} conference paper (Reinforcement Learning Conference), theoretical and empirical.
+
+\textbf{Cross references:} Experiments use Safety Gym environments closely related to Safety-Gymnasium~\cite{ji2023safety}, and directly compare against several CMDP baselines (CPO, TRPO-Lagrangian) benchmarked there. Unlike Safety-Gymnasium's explicit cost-constraint formulation, ROSARL argues that specifying cost functions is itself a limitation and proposes a fundamentally different formulation. The reward-only approach is particularly compatible with evolutionary methods, which naturally optimise scalar fitness: the Minmax penalty could be directly integrated with the ES of Salimans et al.~\cite{salimans2017evolution} and Qiu et al.~\cite{qiu2026evolution}, which also operate on scalar returns. Interestingly, Qiu et al.\ observe that ES \emph{naturally} avoids reward hacking as an emergent property of the optimiser, whereas ROSARL achieves safety through \emph{engineered} reward shaping---these are complementary mechanisms. Unlike the QD approaches of Mouret and Clune~\cite{mouret2015illuminating} and Tjanaka et al.~\cite{tjanaka2022approximating}, ROSARL seeks a single safe-and-optimal policy rather than a diverse archive.
+
+\textbf{Summary:} This paper tackles the problem of learning safe policies in RL without requiring explicit cost functions or constraint specifications. The authors introduce the \textit{Minmax penalty}, the smallest penalty for unsafe states that guarantees safe optimal policies, regardless of task rewards. A key theoretical insight is that the Minmax penalty depends on two environment properties: the \textit{diameter} (the longest expected time to reach an absorbing state) and \textit{controllability} (the minimum probability of reaching safe goal states). The paper derives upper and lower bounds on this penalty and proposes a practical, model-free algorithm that estimates it during training using value function estimates, integrable into any standard RL pipeline. Experiments in high-dimensional continuous control environments from Safety Gym demonstrate that reward-only agents consistently learn safer policies than prior constrained methods. The key takeaway is that a single scalar reward signal is sufficient for safe RL---no separate cost function or constraint is needed. However, the theory is restricted to unsafe \emph{terminal} states only (not intermediate unsafe states), assumes undiscounted stochastic shortest-path MDPs (the continuous-control experiments use discounted MDPs, violating this assumption), and computing the exact Minmax penalty is NP-hard, so the practical algorithm is a heuristic approximation.
+\end{quotation}
+
+\bibitem{salimans2017evolution}
+Tim Salimans, Jonathan Ho, Xi Chen, Szymon Sidor, and Ilya Sutskever.
+\textit{Evolution Strategies as a Scalable Alternative to Reinforcement Learning}.
+arXiv preprint arXiv:1703.03864, OpenAI, 2017.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To address the limited parallelisability and high communication overhead of gradient-based RL in continuous-control and game-playing domains by demonstrating that Natural Evolution Strategies with a shared-seed communication trick can match policy-gradient performance while scaling near-linearly to thousands of workers.
+
+\textbf{Style/Type:} preprint, empirical.
+
+\textbf{Cross references:} This paper introduces the OpenAI-ES framework and shared-seed communication strategy on which both Qiu et al.~\cite{qiu2026evolution} and ESSA~\cite{korotyshova2025essa} build directly. Qiu et al.\ extend it to full-parameter LLM fine-tuning at billion-parameter scale, demonstrating that the core algorithm works with surprisingly small populations ($N{=}30$) far beyond the networks tested here. ESSA similarly inherits the seed-based communication but upgrades from isotropic Gaussian perturbations to CMA-ES with adaptive covariance and compresses the search space via SVD. Tjanaka et al.~\cite{tjanaka2022approximating} adopt the OpenAI-ES gradient estimator as a subroutine within CMA-MEGA, but find that ES-only estimation is inferior to TD3 in reward-shaped RL domains---a limitation not apparent in the original MuJoCo experiments here. Unlike MAP-Elites~\cite{mouret2015illuminating}, which is also gradient-free and parallel, ES converges to a single policy rather than maintaining a diverse archive. The method has no safety mechanism, but its scalar-reward interface is directly compatible with the Minmax penalty of ROSARL~\cite{nanguetasse2024rosarl}.
+
+\textbf{Summary:} This seminal paper shows that Evolution Strategies (ES) can match the performance of standard gradient-based RL approaches while offering superior parallelism. Using a variant of Natural Evolution Strategies (NES) with an isotropic Gaussian perturbation distribution (OpenAI-ES), the authors train neural network policies for MuJoCo continuous control tasks and Atari games. Key findings include: (1)~a novel communication strategy based on shared random seeds reduces bandwidth to scalar exchanges, enabling near-linear speedups with over 1,440 parallel workers; (2)~the MuJoCo 3D humanoid locomotion task was solved in under 10 minutes; (3)~ES exhibited better exploration behaviour, discovering qualitatively different gaits; and (4)~ES is invariant to action frequency and delayed rewards. On Atari, ES outperformed A3C on 23 of 51 games using comparable total compute to A3C's 1-day wall-clock results, while underperforming on the remaining 28 games. Theoretically, the authors show that the variance of ES gradient estimates is independent of episode length~$T$, whereas policy gradient variance grows linearly with~$T$, making ES increasingly advantageous for long-horizon problems. The key takeaway is that parallelisability can more than compensate for lower sample efficiency. However, ES uses 3--10$\times$ more environment frames than A3C, requires massive parallelism (1,440 cores) to achieve competitive wall-clock times, is sensitive to network parameterisation without virtual batch normalisation, and uses a fixed isotropic covariance that cannot adapt during training.
+\end{quotation}
+
+\bibitem{korotyshova2025essa}
+Daria Korotyshova, Boris Shaposhnikov, Alexey Malakhov, Alexey Khokhulin, Nikita Surnachev, Kirill Ovcharenko, George Bredis, Alexey Gorbatovski, Viacheslav Sinii, and Daniil Gavrilov.
+\textit{ESSA: Evolutionary Strategies for Scalable Alignment}.
+T-Tech, arXiv preprint arXiv:2507.04453, 2025.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To address the high memory cost, gradient-synchronisation overhead, and hyperparameter brittleness of gradient-based RLHF for LLM alignment by replacing the entire training pipeline with a gradient-free CMA-ES search over an aggressively compressed LoRA+SVD parameter space.
+
+\textbf{Style/Type:} preprint, empirical.
+
+\textbf{Cross references:} ESSA inherits the shared-seed communication strategy of Salimans et al.~\cite{salimans2017evolution} but upgrades from isotropic Gaussian perturbations to CMA-ES with adaptive covariance---the same CMA-ES family used in the QD methods of Tjanaka et al.~\cite{tjanaka2022approximating}, though there it operates in a gradient-coefficient space rather than a compressed parameter space. In contrast to Qiu et al.~\cite{qiu2026evolution}, who search the \emph{full} billion-parameter space with no dimensionality reduction, ESSA compresses via LoRA+SVD; together, the two papers bracket the design space for evolutionary LLM fine-tuning, with ESSA trading expressiveness for tractability. Qiu et al.'s results suggest this compression may be an unnecessary constraint, though ESSA may retain advantages at even larger model scales. Unlike Safety-Gymnasium~\cite{ji2023safety} and ROSARL~\cite{nanguetasse2024rosarl}, ESSA has no explicit safety or constraint mechanism---safety must be embedded in the scalar reward signal. Similarly to MAP-Elites~\cite{mouret2015illuminating}, ESSA uses evolutionary search, but it discards the diversity-preservation mechanism entirely, converging on a single aligned model.
+
+\textbf{Summary:} This paper introduces ESSA, which replaces the conventional gradient-based RLHF pipeline (PPO, GRPO) with a wholly gradient-free evolutionary approach to LLM alignment. ESSA restricts optimisation to Low-Rank Adapters (LoRA) and further compresses the search space via singular value decomposition (SVD), so that CMA-ES optimises only the singular values of each adapter matrix. Building on the shared-seed communication strategy, only random seeds and scalar rewards are exchanged between workers, so communication costs scale independently of model size. ESSA operates entirely in quantised inference mode with minimal accuracy loss (BFLOAT16: 0.847, INT8: 0.844, INT4: 0.838 on GSM8K) and shows robust hyperparameter behaviour, remaining stable across LoRA ranks 2--16 and population sizes 24--96. On Qwen2.5-32B for PRM800K, ESSA reaches near-optimal accuracy twice as fast on 16 GPUs and six times as fast on 128 GPUs compared with GRPO. The key takeaway is that aggressive dimensionality reduction makes ES not just viable but competitive with gradient-based RLHF, while being simpler to engineer. However, ESSA depends on a strong SFT warm-start, is bounded by the fixed-rank expressivity of LoRA adapters, only replaces the alignment phase (SFT still requires gradients), and evaluates on a narrow set of tasks (maths, instruction-following)---with no comparison against offline preference methods such as DPO.
+\end{quotation}
+
+\bibitem{qiu2026evolution}
+Xin Qiu, Yulu Gan, Conor F. Hayes, Qiyao Liang, Yinggan Xu, Roberto Dailey, Elliot Meyerson, Babak Hodjat, and Risto Miikkulainen.
+\textit{Evolution Strategies at Scale: LLM Fine-Tuning Beyond Reinforcement Learning}.
+Cognizant AI Lab, Preprint, February 2026.
+
+\begin{quotation}
+\noindent
+\textbf{Aim:} To challenge the assumption that evolution strategies cannot scale to billion-parameter models by demonstrating full-parameter ES fine-tuning of LLMs---without any dimensionality reduction---on symbolic and mathematical reasoning tasks, while investigating ES's inherent resistance to reward hacking.
+
+\textbf{Style/Type:} preprint, empirical.
+
+\textbf{Cross references:} This paper directly extends the OpenAI-ES framework of Salimans et al.~\cite{salimans2017evolution}, inheriting the shared-seed communication trick but reducing the population from ${\sim}$10,000 to just~30---a ${\sim}$300$\times$ reduction enabled by the low intrinsic dimensionality of LLMs. In contrast to ESSA~\cite{korotyshova2025essa}, which compresses the search space via LoRA+SVD before applying CMA-ES, this work searches the full parameter space with no compression, suggesting ESSA's dimensionality reduction may be an unnecessary constraint; together the two papers bracket the design space for evolutionary LLM fine-tuning. Unlike Tjanaka et al.~\cite{tjanaka2022approximating}, who use CMA-ES with adaptive covariance for quality-diversity, Qiu et al.\ use fixed isotropic Gaussian noise and seek a single optimised model---simpler but potentially less sample-efficient. The finding that ES naturally avoids reward hacking complements the safety work of ROSARL~\cite{nanguetasse2024rosarl}: ROSARL achieves safety through \emph{engineered} reward shaping with formal guarantees, whereas ES exhibits safety-relevant behaviour as an \emph{emergent} property of optimising a distribution rather than a single policy. Neither approach requires the explicit cost constraints formalised in Safety-Gymnasium~\cite{ji2023safety}.
+
+\textbf{Summary:} This paper is the first to demonstrate that evolution strategies can directly fine-tune every parameter of a multi-billion-parameter LLM, forgoing any form of dimensionality reduction. Using a simplified variant of Natural Evolution Strategies (NES) with fixed-covariance perturbation noise, the authors demonstrate that ES can search directly in billion-parameter spaces with surprisingly small populations (as few as~30). On the Countdown symbolic reasoning task, ES achieves substantial margins over the best RL baselines: 60.5\% vs.\ 43.8\% (Qwen2.5-3B) and 66.8\% vs.\ 57.5\% (Qwen2.5-7B). On mathematical reasoning, ES reaches 33.1\% on Minerva Math (vs.\ best RL 30.5\%) and 78.6\% on MATH500 (vs.\ GRPO 78.0\%). Conciseness experiments reveal a Pareto front: ES can trade off answer length against accuracy, whereas RL methods tend toward verbose reward-hacking solutions. Key safety-relevant findings include: ES naturally avoids reward hacking without requiring KL-divergence penalties; ES is more robust and consistent across runs and base LLMs than RL; and ES requires only forward inference, saving significant GPU memory. The key takeaway is that ES fundamentally challenges the necessity of backpropagation for LLM post-training. However, the work is tested only up to 8B parameters, uses a deliberately vanilla ES variant (omitting rank transformation, mirrored sampling, and Adam), evaluates on a narrow task set (no open-ended generation, dialogue, or safety alignment), provides no theoretical explanation for why $N{=}30$ suffices, and cannot leverage process rewards or token-level credit assignment.
+\end{quotation}
+
+\end{thebibliography}
+
+\includepdf[pages=-]{../PG student AI declarationLatest.pdf}
+
+\end{document}
