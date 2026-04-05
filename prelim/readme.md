@@ -1,2 +1,0 @@
-# Covariance Matrix Adaptation Evolution Strategy
-Optimising without using derivatives. There are random points which are the species. After some generations one of them find the minimum. Kids are created and the weakest ones die off
