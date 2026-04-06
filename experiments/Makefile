@@ -16,7 +16,6 @@ setup:
 	git config --global user.name "Sachin"
 	git config --global user.email "sachinmohan29@gmail.com"
 
-
 install:
 	uv sync
 
