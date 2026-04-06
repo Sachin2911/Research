@@ -1,10 +1,10 @@
 [project]
 name = "safe-ai-evo"
 version = "0.1.0"
-requires-python = ">=3.10"
+requires-python = "==3.13.12"
 
 dependencies = [
-    "torch>=2.3.0",
+    "torch==2.11.0",
     "transformers>=4.40.0",
     "peft>=0.10.0",          # LoRA
     "accelerate>=0.29.0",

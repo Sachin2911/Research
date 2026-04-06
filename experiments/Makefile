@@ -1,9 +1,13 @@
-.PHONY: setup install login model run clean
+SHELL := /bin/bash
+
+.PHONY: setup install login model prompt run clean #Declaration that tells make that these are commands
 
 # Installing UV 
 setup:
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 	source ~/.cargo/env  # or restart shell
+	uv python install 3.13.12
+	uv python pin 3.13.12
 	uv sync
 
 
