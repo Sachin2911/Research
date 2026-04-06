@@ -16,6 +16,12 @@ setup:
 	git config --global user.name "Sachin"
 	git config --global user.email "sachinmohan29@gmail.com"
 
+	@read -p "Enter GitHub token: " token; \
+	git remote set-url origin https://Sachin2911:$$token@github.com/Sachin2911/Research.git
+#   HuggingFace login
+	@read -p "Enter HuggingFace token: " hf_token; \
+	. ~/.local/bin/env && uv run hf auth login --token $$hf_token
+
 # Install the environment
 install:
 	uv sync
