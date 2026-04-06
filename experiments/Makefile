@@ -4,11 +4,17 @@ SHELL := /bin/bash
 
 # Installing UV 
 setup:
+	apt-get install -y btop
+
+
 	curl -LsSf https://astral.sh/uv/install.sh | sh
-	source ~/.cargo/env  # or restart shell
-	uv python install 3.13.12
-	uv python pin 3.13.12
-	uv sync
+	. ~/.local/bin/env && uv python install 3.13.12
+	. ~/.local/bin/env && uv python pin 3.13.12
+	. ~/.local/bin/env && uv sync
+
+
+	git config --global user.name "Sachin"
+	git config --global user.email "sachinmohan29@gmail.com"
 
 
 install:
