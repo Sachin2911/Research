@@ -1,21 +1,16 @@
-from transformers import pipeline
 import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import LoraConfig, get_peft_model, TaskType
 
-pipe = pipeline(
-    "text-generation",
-    model="Qwen/Qwen2.5-14B-Instruct",
-    dtype=torch.float16,
-    device_map="auto"
+model_id = "meta-llama/Llama-3.2-3B-Instruct"
+
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+tokenizer.pad_token = tokenizer.eos_token
+
+#4-bit quantisation to save vram
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    load_in_4bit=True,        
+    torch_dtype=torch.float16,
+    device_map="auto"        
 )
-
-messages = [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "What is the capital of France?"}
-]
-
-result = pipe(
-    messages,
-    max_new_tokens=1000,
-    pad_token_id=pipe.tokenizer.eos_token_id,
-)
-print(result[0]["generated_text"][-1]["content"])
