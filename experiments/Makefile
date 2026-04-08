@@ -27,7 +27,7 @@ install:
 	uv sync
 
 # Run a quick inference with a test prompt
-prompt:
+test:
 	uv run python src/model_test.py
 
 # Deleting the environment
