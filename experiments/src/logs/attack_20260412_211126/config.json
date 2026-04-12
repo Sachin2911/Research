@@ -1,0 +1,9 @@
+{
+  "event": "config",
+  "search_dim": 1000,
+  "sigma": 0.01,
+  "max_generations": 20,
+  "population_size": 25,
+  "lora_param_count": 4587520,
+  "timestamp": "2026-04-12T21:11:26.940363"
+}

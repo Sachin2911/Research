@@ -1,0 +1,51 @@
+Tier,Name,Affiliation,Relevance,Why They Matter
+1,Aengus Lynch,Watertight AI / UCL,Strategic target co-supervisor,Founder of Watertight AI - practical AI safety focus aligns perfectly with CoEvoRL
+1,Andy Zou,UC Berkeley,Created GCG adversarial attack,Your work is the weight-space counterpart to his prompt-space attacks - he'll immediately see the novelty
+1,Neel Nanda,Google DeepMind,Mechanistic interpretability lead,SAE expert - your SAE analysis of safety features is directly in his research area
+1,Stephen Casper,MIT,Red-teaming and representation engineering,Published on adversarial robustness and safety evaluation - connects attack and interpretability
+1,Mantas Mazeika,UIUC / Gray Swan,Co-created HarmBench,Built the evaluation dataset you're using - interested in new attack vectors
+1,Dan Hendrycks,Center for AI Safety,Co-created HarmBench,Broad safety evaluation - would want to know about gradient-free weight-space attacks
+1,Paul Pauls,Independent researcher,Built Llama 3.2 SAE,You're using his SAE - he'd be excited to see it applied to safety attack analysis
+1,Maksym Andriushchenko,EPFL,Adaptive jailbreaking attacks,Published on simple adaptive attacks bypassing defenses - directly relevant methodology
+1,Xiaogeng Liu,University of Wisconsin,AutoDAN author,Evolutionary-style prompt attacks - your work extends this to weight space
+1,Patrick Chao,CMU,PAIR jailbreak framework,JailbreakBench creator - interested in systematic attack evaluation
+2,Sonia Joseph,Meta,Interpretability tooling,Open-source interpretability tools - would appreciate custom LoRA and SAE integration
+2,Stella Biderman,EleutherAI,Published SAE for Llama 3,Open-source SAE ecosystem - supportive of student research
+2,Arthur Conmy,Google DeepMind,SAE research and activation patching,Technical SAE expertise - could advise on your feature diffing methodology
+2,Tom Lieberum,Google DeepMind,Llama Scope SAEs and Gated SAEs,Built SAEs for Llama family - directly relevant model and technique
+2,Sen Rajamanoharan,Google DeepMind,JumpReLU SAEs,SAE architecture improvements - could advise on which SAE variant to use
+2,Lee Sharkey,Anthropic,Open Problems in Mechanistic Interpretability,Defined the open problems your work addresses
+2,Joshua Batson,Anthropic,Attribution graphs and circuit tracing,Advanced interpretability - your SAE diffing connects to his attribution work
+2,Chris Olah,Anthropic,Founded mechanistic interpretability field,Pioneer of the entire field your interpretability layer builds on
+2,Leonard Bereska,University of Amsterdam,Comprehensive mech interp survey author,Academic perspective on where SAE research fits in the broader field
+2,Callum McDougall,ARENA,SAE research and mech interp education,Educator - could help frame your work for broader audience
+3,Eric Wong,UPenn,Adversarial robustness and certified defenses,Theoretical grounding for adversarial attacks on neural networks
+3,Zico Kolter,CMU,Andy Zou's advisor and adversarial ML theory,Senior figure in adversarial ML - high-impact endorsement if interested
+3,Florian Tramèr,ETH Zurich,Adversarial ML and model security,Broad expertise in model security - weight-space attacks are novel to this community
+3,Nicholas Carlini,Google DeepMind,Adversarial examples and model extraction,Most cited adversarial ML researcher - would validate the novelty claim
+3,Tom Goldstein,University of Maryland,Coercing LLMs to do almost anything,Published on extreme LLM manipulation - your gradient-free approach is complementary
+3,Bo Li,UIUC,Adversarial robustness and trustworthy AI,Broad trustworthy AI research - weight-space attacks add to her threat taxonomy
+3,Javier Rando,ETH Zurich,Red-teaming and safety evaluation,Practical red-teaming focus - would appreciate the evolutionary approach
+3,Samvel Samvelyan,Meta / UCL,Rainbow Teaming diverse attack generation,Diversity in attack generation connects to your co-evolutionary Phase 2
+3,Seanie Lee,KAIST,GFlowNet diverse attacks on LLMs,Diversity-seeking attacks - your CMA-ES approach is an alternative paradigm
+3,Roman Belaire,Singapore Management University,RL-based multi-turn red teaming,Formalizing red-teaming as MDP - connects to your CMDP formulation in Phase 3
+4,Nikolaus Hansen,INRIA,Created CMA-ES,Would appreciate novel application of his algorithm to AI safety
+4,Joel Lehman,Formerly Uber AI,Evolutionary approaches to ML,Pioneer of open-ended evolution - co-evolution is central to your project
+4,Jeff Clune,University of British Columbia,Neuroevolution and quality-diversity,Leading figure in evolutionary AI - could advise on co-evolutionary dynamics
+4,Kenneth Stanley,OpenAI / Independent,NEAT and novelty search,Novelty search connects to your hall-of-fame diversity mechanism
+4,Jean-Baptiste Mouret,INRIA,MAP-Elites and quality-diversity,Quality-diversity algorithms could improve your attack diversity
+4,Antoine Cully,Imperial College London,Quality-diversity and evolutionary robotics,Co-evolutionary arms races in robotics parallel your Red Queen dynamics
+4,Elliot Meyerson,Cognizant AI Labs,Evolutionary neural architecture search,Evolutionary search in neural network weight space - directly adjacent
+5,Jan Leike,Formerly Anthropic,Scalable alignment and RLHF limitations,Your work demonstrates RLHF brittleness - his core research concern
+5,John Schulman,Anthropic,PPO creator and RLHF architect,Created the alignment method you're attacking - would want to know about vulnerabilities
+5,Ethan Perez,Anthropic,Red-teaming and model-written evaluations,Systematic safety evaluation - gradient-free attacks are a new evaluation tool
+5,Samuel Bowman,Anthropic,Safety evaluation and alignment benchmarks,Alignment evaluation expert - your attack methodology is a new benchmark dimension
+5,Jacob Steinhardt,UC Berkeley,AI safety and adversarial robustness theory,Theoretical safety - could help formalize your co-evolutionary guarantees
+5,Paul Christiano,Alignment Research Center,Alignment theory and RLHF foundations,Foundational alignment thinker - your work challenges RLHF assumptions
+5,Tomek Korbak,Independent,RLHF alternatives and alignment training,Alternative alignment methods - your attacks test robustness across approaches
+5,Rafael Rafailov,Stanford,DPO author,Created DPO which is used in Llama alignment - would want to know about vulnerabilities
+6,Mengnan Du,New Jersey Institute of Technology,SAE survey lead author,Academic perspective on SAE applications - your safety application is novel
+6,Erik Jenner,Goodfire,SAE deployment for Llama steering,Practical SAE deployment - your attack analysis is a new use case for their tools
+6,Lukas Berglund,Independent,Reversal curse and model knowledge,Model knowledge limitations connect to how attacks exploit internal representations
+6,Jason Wei,OpenAI,Chain-of-thought and emergent abilities,Emergent model behaviors - safety as an emergent property that can be disrupted
+6,David Bau,Northeastern University,Representation engineering and model editing,Model editing connects to your LoRA weight-space perturbation approach
